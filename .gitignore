@@ -1,0 +1,6 @@
+.DS_Store
+.idea
+*.pyc
+business_card/localsettings.py
+deploy/vars/main.yml
+db.sqlite3
