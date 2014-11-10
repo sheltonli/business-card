@@ -1,0 +1,102 @@
+---
+
+- hosts: all
+
+  vars_files:
+    - vars/main.yml
+  #-----------------------------------------------------------------------------
+  # tasks
+  #-----------------------------------------------------------------------------
+
+  tasks:
+    # nginx repo
+    - apt_repository: repo='ppa:nginx/stable' state=present
+
+    # install packages
+    - apt: update_cache=yes cache_valid_time=3600
+    - apt: pkg={{ item }} state=latest
+      with_items:
+        - build-essential
+        - fail2ban
+        - git
+        - htop
+        - libbz2-dev
+        - memcached
+        - nginx
+        - python-dev
+        - python-pip
+        - python-software-properties
+        - supervisor
+
+    # ssh setup
+    - template: src=templates/sshd_config.j2 dest=/etc/ssh/sshd_config owner=0 group=0 mode=0644 validate='/usr/sbin/sshd -T -f %s'
+      notify:
+        - restart ssh
+
+    # fail2ban setup
+    - template: src=templates/jail.local.j2 dest=/etc/fail2ban/jail.local
+      notify:
+        - restart fail2ban
+
+    # /etc/hosts setup
+    - template: src=templates/hosts.j2 dest=/etc/hosts owner=0 group=0 mode=0644
+      notify:
+        - apply hostname
+
+    # hostname and relic
+    - template: src=templates/hostname.j2 dest=/etc/hostname owner=0 group=0 mode=0644
+
+    # python packages
+    - pip: name=virtualenv state=present
+
+    #directories
+    - file: state=directory path={{ item }} owner=www-data group=www-data
+      with_items:
+        - "{{ django_path }}"
+        - "{{ log_path }}"
+        - "{{ media_path }}"
+        - "{{ static_path }}"
+        - "{{ venv_path }}"
+
+    # nginx setup
+    - file: path=/etc/nginx/sites-enabled/default state=absent
+    - file: path=/etc/nginx/sites-available/default state=absent
+    - template: src=templates/nginx.conf.j2 dest=/etc/nginx/nginx.conf
+      notify: restart nginx
+
+    # supervisor setup
+    - template: src=templates/supervisord.conf.j2 dest=/etc/supervisor/supervisord.conf
+      notify: restart supervisor
+
+    # ufw setup
+    - ufw: rule=allow port={{ item }}
+      with_items:
+        - 22
+        - 80
+    - ufw: state=enabled policy=deny
+
+  #-----------------------------------------------------------------------------
+  # handlers
+  #-----------------------------------------------------------------------------
+
+  handlers:
+    - name: restart ssh
+      service: name=ssh state=restarted
+
+    - name: restart nginx
+      service: name=nginx state=restarted
+
+    - name: restart supervisor
+      service: name=supervisor state=restarted
+
+    - name: restart memcached
+      service: name=memcached state=restarted
+
+    - name: restart fail2ban
+      service: name=fail2ban state=restarted
+
+    - name: restart ssh
+      service: name=ssh state=restarted
+
+    - name: apply hostname
+      command: hostname {{ hostname }}

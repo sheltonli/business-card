@@ -1,0 +1,20 @@
+[supervisord]
+logfile=/var/www/business-card/logs/supervisord.log
+logfile_maxbytes = 1MB
+logfile_backups=10
+loglevel=info
+autorestart=true
+pidfile=/var/www/business-card/supervisord.pid
+user=www-data
+
+[program:business-card]
+command=/var/www/business-card/venv/bin/gunicorn mrcheeseshop.wsgi:application
+    --bind unix:/var/www/business-card/gunicorn.sock
+    --workers 2
+    --max-requests 5000
+    --timeout 30
+    --error-logfile /var/www/business-card/logs/gunicorn-error.log
+directory=/var/www/business-card/django
+user=www-data
+autostart=true
+autorestart=true
