@@ -114,7 +114,7 @@ def _rsync():
         delete=True
     )
 
-    run('ln -s {django_path}/config/{config}/localsettings.py {django_path}/mrcheeseshop/localsettings.py'.format(**env))
+    run('ln -s {django_path}/config/{config}/localsettings.py {django_path}/business_card/localsettings.py'.format(**env))
 
 
 def _install_requirements():
