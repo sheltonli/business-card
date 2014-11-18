@@ -17,3 +17,19 @@
 .nav > li > a {
 
 }
+
+.navbar-brand {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* --------------------------------------------------
+    homepage
+---------------------------------------------------*/
+
+#section1{
+    background-color: lightskyblue;
+    max-height: 550px;
+    min-height: 550px;
+}
+
