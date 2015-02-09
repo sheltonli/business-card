@@ -4,3 +4,4 @@
 business_card/localsettings.py
 deploy/vars/main.yml
 db.sqlite3
+static/css/app.css

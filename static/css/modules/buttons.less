@@ -1,0 +1,39 @@
+/* -----------------------------------------------------------------------------
+    button styles
+----------------------------------------------------------------------------- */
+
+button::-moz-focus-inner {
+    padding: 0;
+    border: 0
+}
+
+button, .button {
+    .border-radius(@border-radius);
+    .inline-block();
+    .transition(all ease 150ms);
+
+    background-color: #ddd;
+    border: none;
+    border-bottom: 2px solid #bbb;
+    color: #333;
+    font-size: 15px;
+    padding: 10px;
+
+    &:hover {
+        .transition(all ease 150ms);
+        background-color: #d5d5d5;
+        cursor: pointer;
+    }
+}
+
+.button-danger {
+    background-color: #d9534f;
+    border-bottom: 2px solid #AE423F;
+    color: #ffffff;
+
+    &:hover {
+        .transition(all ease 150ms);
+        background-color: #C34B47;
+        cursor: pointer;
+    }
+}
