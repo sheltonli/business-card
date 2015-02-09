@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% import '_macros/forms.html' as forms with context %}
+
+{% block content %}
+    <form action="" method="post" class="account-form">
+        {{ forms.csrf_input() }}
+        <h2 class="text-center">Flyer Editor</h2>
+        <ul id="message-list">
+            <li class="message message-info">Please login using your BrandStem credentials</li>
+        </ul>
+        {{ forms.render_form(form) }}
+        <button>Login</button>
+    </form>
+{% endblock %}

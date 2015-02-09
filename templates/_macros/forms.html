@@ -1,0 +1,7 @@
+{% macro csrf_input() %}
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+{% endmacro %}
+
+{% macro render_form(form) %}
+    {{ form.as_p()|safe }}
+{% endmacro %}
