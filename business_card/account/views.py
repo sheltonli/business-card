@@ -18,7 +18,7 @@ class AccountLoginView(TemplateView):
         form = AccountLoginForm(data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
-            next = request.POST.get('next', reverse('flyer.home'))
+            next = request.POST.get('next', reverse('business_card.home'))
             return redirect(next)
 
         return self.render_to_response({'form': form})
@@ -31,7 +31,7 @@ class AccountLogoutView(TemplateView):
 
     def post(self, request):
         logout(request)
-        return redirect('account.login')
+        return redirect('business_card.home')
 
 
 class AccountRegisterView(TemplateView):

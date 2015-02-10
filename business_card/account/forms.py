@@ -23,7 +23,6 @@ class AccountLoginForm(forms.Form):
 
     error_messages = {
         'invalid_login': _('Please ensure you entered the correct email and password. Note that the password field is case-sensitive.'),
-        'inactive': _('A staff account is required to enter the Flyer Editor program.'),
     }
 
     def __init__(self, *args, **kwargs):
@@ -39,8 +38,6 @@ class AccountLoginForm(forms.Form):
             self.user_cache = authenticate(email=email, password=password)
             if self.user_cache is None:
                 raise forms.ValidationError(self.error_messages['invalid_login'])
-            elif self.user_cache.is_staff is False:
-                raise forms.ValidationError(self.error_messages['inactive'])
 
         return self.cleaned_data
 
@@ -89,6 +86,7 @@ class AccountRegisterForm(forms.ModelForm):
             'class': 'form-control',
         }),
         label = 'Address Line 2',
+        required=False,
     )
 
     city = forms.CharField(widget=forms.TextInput(attrs={
@@ -159,7 +157,7 @@ class AccountRegisterForm(forms.ModelForm):
     def save(self, commit=True):
         user = super(AccountRegisterForm, self).save(commit=False)
         user.email = self.cleaned_data.get('email')
-        user.password = user.set_password(self.cleaned_data.get('password'))
+        user.set_password(self.cleaned_data.get('password'))
         user.full_name = self.cleaned_data.get('full_name')
         user.address = self.cleaned_data.get('address')
         user.address2 = self.cleaned_data.get('address2')

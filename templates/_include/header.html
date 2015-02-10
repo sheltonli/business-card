@@ -1,3 +1,5 @@
+{% import '_macros/forms.html' as forms with context %}
+
 <nav class="navbar" id="site-navbar">
     <div class="container" id="navbar-container">
         <div class="navbar-header">
@@ -16,8 +18,15 @@
         </ul>
         <div class="navbar-right">
             <ul class="nav navbar-nav">
-                <li><a href="{{ url('account.register') }}">Sign Up</a></li>
-                <a href="{{ url('account.login') }}" class="btn btn-primary navbar-btn navbar-right">Login</a>
+                {% if user.is_authenticated() %}
+                    <form action="{{ url('account.logout') }}" method="post" class="account-form">
+                        {{ forms.csrf_input() }}
+                        <button class="btn btn-primary navbar-btn right">Logout</button>
+                    </form>
+                {% else %}
+                    <li><a href="{{ url('account.register') }}">Sign Up</a></li>
+                    <a href="{{ url('account.login') }}" class="btn btn-primary navbar-btn right">Login</a>
+                {% endif %}
             </ul>
         </div>
     </div>

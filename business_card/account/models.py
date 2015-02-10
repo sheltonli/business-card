@@ -1,6 +1,14 @@
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
+
+class UserManager(BaseUserManager):
+
+    def create_superuser(self, email, password, **extra_fields):
+        user = self.model(email=email, is_staff=True, is_active=True, **extra_fields)
+        user.set_password(password)
+        user.save()
+        return user
 
 class User(AbstractBaseUser):
 
@@ -29,9 +37,11 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    objects = UserManager()
+
     class Meta:
+        app_label = 'account'
         db_table = 'user'
-        app_label = 'business_card'
         managed = True
 
     def __str__(self):
