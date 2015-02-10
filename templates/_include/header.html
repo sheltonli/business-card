@@ -1,7 +1,7 @@
 <nav class="navbar" id="site-navbar">
     <div class="container" id="navbar-container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="{{ url('index_view') }}">Placeholder Name</a>
+            <a class="navbar-brand" href="{{ url('business_card.home') }}">Placeholder Name</a>
         </div>
         <ul class="nav navbar-nav">
             <li class="dropdown">
@@ -16,7 +16,7 @@
         </ul>
         <div class="navbar-right">
             <ul class="nav navbar-nav">
-                <li><a href="">Sign Up</a></li>
+                <li><a href="{{ url('account.register') }}">Sign Up</a></li>
                 <a href="{{ url('account.login') }}" class="btn btn-primary navbar-btn navbar-right">Login</a>
             </ul>
         </div>
